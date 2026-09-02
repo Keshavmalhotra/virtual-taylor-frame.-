@@ -15,7 +15,25 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from virtual_taylor_frame.main import main
+def _run():
+    from virtual_taylor_frame.main import main
+    return main()
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(_run())
+    except Exception:
+        import traceback
+        import ctypes
+        err = traceback.format_exc()
+        try:
+            ctypes.windll.user32.MessageBoxW(
+                0,
+                f"An error occurred while launching Virtual Taylor Frame:\n\n{err}",
+                "Virtual Taylor Frame - Startup Error",
+                0x10,
+            )
+        except Exception:
+            pass
+        sys.exit(1)
+

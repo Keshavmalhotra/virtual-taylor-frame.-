@@ -1,0 +1,165 @@
+{
+  "format_name": "TaylorFrame",
+  "format_version": "1.0.0",
+  "app_name": "Virtual Taylor Frame",
+  "app_version": "1.0.0",
+  "saved_at": "2026-09-02T09:07:51.659795+00:00",
+  "metadata": {
+    "title": "Basic Arithmetic Expressions",
+    "notes": "Addition and multiplication rows."
+  },
+  "dimensions": {
+    "rows": 20,
+    "columns": 30
+  },
+  "cursor": {
+    "row": 1,
+    "column": 1
+  },
+  "cells": [
+    {
+      "row": 3,
+      "column": 5,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 270,
+        "symbol": "7",
+        "label": "Number 7",
+        "braille": "⠼⠛"
+      }
+    },
+    {
+      "row": 3,
+      "column": 7,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_B_DOTS",
+        "orientation_deg": 90,
+        "symbol": "+",
+        "label": "Plus",
+        "braille": "⠬"
+      }
+    },
+    {
+      "row": 3,
+      "column": 9,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 90,
+        "symbol": "3",
+        "label": "Number 3",
+        "braille": "⠼⠉"
+      }
+    },
+    {
+      "row": 3,
+      "column": 11,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_B_DOTS",
+        "orientation_deg": 270,
+        "symbol": "=",
+        "label": "Equals",
+        "braille": "⠿"
+      }
+    },
+    {
+      "row": 3,
+      "column": 13,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 0,
+        "symbol": "1",
+        "label": "Number 1",
+        "braille": "⠼⠁"
+      }
+    },
+    {
+      "row": 3,
+      "column": 14,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_B_DOTS",
+        "orientation_deg": 45,
+        "symbol": "0",
+        "label": "Number 0",
+        "braille": "⠼⠚"
+      }
+    },
+    {
+      "row": 5,
+      "column": 5,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_B_DOTS",
+        "orientation_deg": 0,
+        "symbol": "9",
+        "label": "Number 9",
+        "braille": "⠼⠊"
+      }
+    },
+    {
+      "row": 5,
+      "column": 7,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_B_DOTS",
+        "orientation_deg": 180,
+        "symbol": "*",
+        "label": "Times",
+        "braille": "⠡"
+      }
+    },
+    {
+      "row": 5,
+      "column": 9,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 135,
+        "symbol": "4",
+        "label": "Number 4",
+        "braille": "⠼⠙"
+      }
+    },
+    {
+      "row": 5,
+      "column": 11,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_B_DOTS",
+        "orientation_deg": 270,
+        "symbol": "=",
+        "label": "Equals",
+        "braille": "⠿"
+      }
+    },
+    {
+      "row": 5,
+      "column": 13,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 90,
+        "symbol": "3",
+        "label": "Number 3",
+        "braille": "⠼⠉"
+      }
+    },
+    {
+      "row": 5,
+      "column": 14,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 225,
+        "symbol": "6",
+        "label": "Number 6",
+        "braille": "⠼⠋"
+      }
+    }
+  ]
+}

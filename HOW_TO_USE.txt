@@ -1,0 +1,217 @@
+================================================================================
+                    VIRTUAL TAYLOR FRAME: USER MANUAL & GUIDE
+================================================================================
+
+Welcome to the Virtual Taylor Frame!
+
+This application is a digital, accessible version of the physical Taylor Frame
+(Taylor's Octagonal Mathematical Frame), designed specifically for blind and
+visually impaired students, teachers, and mathematicians.
+
+Every feature of this application is fully accessible using only the keyboard,
+with real-time speech and Braille output via Accessible Output 3 (AO3) compatible
+with NVDA, JAWS, and Windows Narrator / SAPI.
+
+================================================================================
+1. HOW TO LAUNCH THE APPLICATION
+================================================================================
+
+There are three ways to launch Virtual Taylor Frame:
+
+Method A (Recommended - No Terminal Window):
+  Double-click "main.pyw" in Windows Explorer.
+  The application opens immediately in a clean graphical window with NO command
+  prompt or terminal.
+
+Method B (Batch Launcher):
+  Double-click "run.bat" in Windows Explorer.
+
+Method C (Command Line):
+  Open PowerShell or Command Prompt in this folder and run:
+    pythonw main.pyw
+  or to load a specific file:
+    pythonw main.pyw examples/column_addition.tframe
+
+================================================================================
+2. UNDERSTANDING THE TAYLOR FRAME & PEGS
+================================================================================
+
+A physical Taylor Frame is a grid of 8-pointed star sockets (default: 20 rows
+by 30 columns). In each socket, a student places a dual-ended metal/plastic peg
+("type").
+
+Each peg has 8 possible rotational positions (North=0 deg, NE=45 deg, East=90 deg,
+SE=135 deg, South=180 deg, SW=225 deg, West=270 deg, NW=315 deg).
+
+By changing which END faces up, and which ANGLE it is turned to, different numbers
+and mathematical symbols are represented:
+
+--------------------------------------------------------------------------------
+ARITHMETIC PEGS - END A (Single Raised Bar / Line)
+--------------------------------------------------------------------------------
+  0 degrees (North / Up)       -> Digit 1
+  45 degrees (North-East)     -> Digit 2
+  90 degrees (East / Right)    -> Digit 3
+  135 degrees (South-East)    -> Digit 4
+  180 degrees (South / Down)   -> Digit 5
+  225 degrees (South-West)    -> Digit 6
+  270 degrees (West / Left)    -> Digit 7
+  315 degrees (North-West)    -> Digit 8
+
+--------------------------------------------------------------------------------
+ARITHMETIC PEGS - END B (Two Raised Dots / Points)
+--------------------------------------------------------------------------------
+  0 degrees (North / Up)       -> Digit 9
+  45 degrees (North-East)     -> Digit 0
+  90 degrees (East / Right)    -> Plus sign (+)
+  135 degrees (South-East)    -> Minus sign (-)
+  180 degrees (South / Down)   -> Multiplication sign (*)
+  225 degrees (South-West)    -> Division sign (/)
+  270 degrees (West / Left)    -> Equals sign (=)
+  315 degrees (North-West)    -> Decimal point / Fraction separator (.)
+
+--------------------------------------------------------------------------------
+ALGEBRAIC PEGS - END A (V-Angle / Variables)
+--------------------------------------------------------------------------------
+  0 deg (N)  -> x      45 deg (NE) -> y      90 deg (E)  -> z      135 deg (SE) -> a
+  180 deg (S)-> b     225 deg (SW) -> c     270 deg (W)  -> d      315 deg (NW) -> e
+
+--------------------------------------------------------------------------------
+ALGEBRAIC PEGS - END B (Double Bar / Algebraic Symbols)
+--------------------------------------------------------------------------------
+  0 deg (N)  -> ( (Open Paren)         45 deg (NE) -> ) (Close Paren)
+  90 deg (E) -> ^ (Power / Exponent)  135 deg (SE) -> Square root
+  180 deg (S)-> , (Comma)             225 deg (SW) -> ; (Semicolon)
+  270 deg (W)-> : (Colon / Ratio)     315 deg (NW) -> _ (Horizontal Line)
+
+================================================================================
+3. ENTERING MATHEMATICS (TWO WAYS)
+================================================================================
+
+Way 1: Direct Natural Typing (Fastest)
+  Simply press the key on your keyboard:
+    - Digits: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+    - Operators: +, -, *, /, =, .
+    - Variables & Symbols: x, y, z, a, b, c, d, e, (, ), ^, _
+  The application automatically resolves the correct peg type, tactile end, and
+  orientation angle, places it into the socket, and moves the cursor right!
+
+Way 2: Tactile Emulation (Authentic Peg Manipulation)
+  - Press R (or ]) to rotate the peg 45 degrees clockwise.
+  - Press Shift+R (or [) to rotate 45 degrees counter-clockwise.
+  - Press F to flip the peg end (Bar <-> Two Dots).
+  - Press T to toggle between Arithmetic and Algebraic peg families.
+  - Press Delete or Backspace to remove the peg from the current socket.
+
+================================================================================
+4. KEYBOARD NAVIGATION
+================================================================================
+
+  - Arrow Keys (Up, Down, Left, Right):
+      Move cursor one cell at a time.
+  - Ctrl + Arrow Keys:
+      Jump directly to the next occupied peg in that direction (skips empty spaces).
+  - Home:
+      Jump to Column 1 of the current row.
+  - End:
+      Jump to the last column of the current row.
+  - Ctrl + Home:
+      Jump to the Top-Left of the board (Row 1, Column 1).
+  - Ctrl + End:
+      Jump to the Bottom-Right (Row 20, Column 30).
+  - Page Up / Page Down:
+      Jump 5 rows up / down.
+  - Ctrl + G:
+      Open the "Go To Coordinate" dialog to jump directly to any row & column.
+
+================================================================================
+5. AUDITORY & SCREEN READER INSPECTION COMMANDS
+================================================================================
+
+  - Space:
+      Inspect current socket in detail (announces row, column, digit/symbol,
+      tactile end, orientation angle, and compass direction).
+  - F5:
+      Full Frame Summary. Announces total objects, bounding box, and a breakdown
+      of all mathematical rows and expressions.
+  - F6 (or Shift + F5):
+      Read current row horizontally as a continuous mathematical expression
+      (e.g., "Row 5: 7 plus 3 equals 10").
+  - F7 (or Ctrl + F5):
+      Read current column vertically (essential for checking column addition
+      or alignment).
+  - F8:
+      Inspect the 4 surrounding neighbors (North, South, East, West).
+  - F2 (or V):
+      Cycle verbosity level between Minimal, Normal, and Detailed.
+        * Minimal: Speaks only the symbol on change.
+        * Normal: Standard navigation and placement feedback.
+        * Detailed: Reads full angles, compass bearings, and descriptions.
+  - F1:
+      Open the built-in accessible Help & Reference manual.
+
+================================================================================
+6. EDITING, UNDO/REDO & BLOCK OPERATIONS
+================================================================================
+
+  - Ctrl + Z:
+      Undo the last action.
+  - Ctrl + Y (or Ctrl + Shift + Z):
+      Redo the last undone action.
+  - Shift + Delete:
+      Clear all pegs in the current row.
+  - Ctrl + Shift + Delete:
+      Clear the entire frame (prompts with confirmation).
+  - Shift + Arrow Keys:
+      Select a rectangular region of cells.
+  - Ctrl + C:
+      Copy selected block of pegs to clipboard.
+  - Ctrl + X:
+      Cut selected block of pegs.
+  - Ctrl + V:
+      Paste copied block at current cursor location.
+  - Escape:
+      Clear selection.
+
+================================================================================
+7. SAVING & EXPORTING FILES
+================================================================================
+
+  - Ctrl + S:
+      Save the current frame to a native .tframe file (JSON-based mathematical format).
+  - Ctrl + Shift + S:
+      Save As with a new filename.
+  - Ctrl + O:
+      Open an existing .tframe file.
+  - Ctrl + N:
+      Create a new frame (choose from presets or enter custom dimensions).
+  - File -> Export to Plain Text (.txt):
+      Exports a human-readable text file with mathematical expressions and a 2D ASCII grid.
+  - File -> Export to JSON (.json):
+      Exports structured data for external tools.
+
+================================================================================
+8. EXAMPLE LESSONS PROVIDED IN examples/
+================================================================================
+
+  1. "examples/simple_arithmetic.tframe":
+     Shows standard arithmetic equations:
+       Row 3: 7 + 3 = 10
+       Row 5: 9 * 4 = 36
+
+  2. "examples/column_addition.tframe":
+     Shows vertical column alignment:
+       Row 3:   4 2 8
+       Row 4: + 1 3 5
+       Row 5: _ _ _ _ _
+       Row 6:   5 6 3
+
+  3. "examples/linear_equation.tframe":
+     Shows step-by-step algebra equation solving:
+       Row 4: 2x + 5 = 15
+       Row 6: 2x = 10
+       Row 8: x = 5
+
+================================================================================
+                            END OF USER MANUAL
+================================================================================

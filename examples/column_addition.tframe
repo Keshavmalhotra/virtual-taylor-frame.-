@@ -1,0 +1,201 @@
+{
+  "format_name": "TaylorFrame",
+  "format_version": "1.0.0",
+  "app_name": "Virtual Taylor Frame",
+  "app_version": "1.0.0",
+  "saved_at": "2026-09-02T09:07:51.661499+00:00",
+  "metadata": {
+    "title": "Column Addition 428 + 135",
+    "notes": "Vertical column alignment practice."
+  },
+  "dimensions": {
+    "rows": 20,
+    "columns": 30
+  },
+  "cursor": {
+    "row": 1,
+    "column": 1
+  },
+  "cells": [
+    {
+      "row": 3,
+      "column": 7,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 135,
+        "symbol": "4",
+        "label": "Number 4",
+        "braille": "⠼⠙"
+      }
+    },
+    {
+      "row": 3,
+      "column": 8,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 45,
+        "symbol": "2",
+        "label": "Number 2",
+        "braille": "⠼⠃"
+      }
+    },
+    {
+      "row": 3,
+      "column": 9,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 315,
+        "symbol": "8",
+        "label": "Number 8",
+        "braille": "⠼⠓"
+      }
+    },
+    {
+      "row": 4,
+      "column": 5,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_B_DOTS",
+        "orientation_deg": 90,
+        "symbol": "+",
+        "label": "Plus",
+        "braille": "⠬"
+      }
+    },
+    {
+      "row": 4,
+      "column": 7,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 0,
+        "symbol": "1",
+        "label": "Number 1",
+        "braille": "⠼⠁"
+      }
+    },
+    {
+      "row": 4,
+      "column": 8,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 90,
+        "symbol": "3",
+        "label": "Number 3",
+        "braille": "⠼⠉"
+      }
+    },
+    {
+      "row": 4,
+      "column": 9,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 180,
+        "symbol": "5",
+        "label": "Number 5",
+        "braille": "⠼⠑"
+      }
+    },
+    {
+      "row": 5,
+      "column": 5,
+      "peg": {
+        "type": "ALGEBRAIC",
+        "end": "END_B_ALGEBRA",
+        "orientation_deg": 315,
+        "symbol": "_",
+        "label": "Horizontal line",
+        "braille": "⠒⠒"
+      }
+    },
+    {
+      "row": 5,
+      "column": 6,
+      "peg": {
+        "type": "ALGEBRAIC",
+        "end": "END_B_ALGEBRA",
+        "orientation_deg": 315,
+        "symbol": "_",
+        "label": "Horizontal line",
+        "braille": "⠒⠒"
+      }
+    },
+    {
+      "row": 5,
+      "column": 7,
+      "peg": {
+        "type": "ALGEBRAIC",
+        "end": "END_B_ALGEBRA",
+        "orientation_deg": 315,
+        "symbol": "_",
+        "label": "Horizontal line",
+        "braille": "⠒⠒"
+      }
+    },
+    {
+      "row": 5,
+      "column": 8,
+      "peg": {
+        "type": "ALGEBRAIC",
+        "end": "END_B_ALGEBRA",
+        "orientation_deg": 315,
+        "symbol": "_",
+        "label": "Horizontal line",
+        "braille": "⠒⠒"
+      }
+    },
+    {
+      "row": 5,
+      "column": 9,
+      "peg": {
+        "type": "ALGEBRAIC",
+        "end": "END_B_ALGEBRA",
+        "orientation_deg": 315,
+        "symbol": "_",
+        "label": "Horizontal line",
+        "braille": "⠒⠒"
+      }
+    },
+    {
+      "row": 6,
+      "column": 7,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 180,
+        "symbol": "5",
+        "label": "Number 5",
+        "braille": "⠼⠑"
+      }
+    },
+    {
+      "row": 6,
+      "column": 8,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 225,
+        "symbol": "6",
+        "label": "Number 6",
+        "braille": "⠼⠋"
+      }
+    },
+    {
+      "row": 6,
+      "column": 9,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 90,
+        "symbol": "3",
+        "label": "Number 3",
+        "braille": "⠼⠉"
+      }
+    }
+  ]
+}

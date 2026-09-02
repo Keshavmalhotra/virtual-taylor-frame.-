@@ -1,0 +1,201 @@
+{
+  "format_name": "TaylorFrame",
+  "format_version": "1.0.0",
+  "app_name": "Virtual Taylor Frame",
+  "app_version": "1.0.0",
+  "saved_at": "2026-09-02T09:07:51.662573+00:00",
+  "metadata": {
+    "title": "Linear Equation: 2x + 5 = 15",
+    "notes": "Step-by-step linear equation resolution."
+  },
+  "dimensions": {
+    "rows": 20,
+    "columns": 30
+  },
+  "cursor": {
+    "row": 1,
+    "column": 1
+  },
+  "cells": [
+    {
+      "row": 4,
+      "column": 5,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 45,
+        "symbol": "2",
+        "label": "Number 2",
+        "braille": "⠼⠃"
+      }
+    },
+    {
+      "row": 4,
+      "column": 6,
+      "peg": {
+        "type": "ALGEBRAIC",
+        "end": "END_A_ALGEBRA",
+        "orientation_deg": 0,
+        "symbol": "x",
+        "label": "Variable x",
+        "braille": "⠭"
+      }
+    },
+    {
+      "row": 4,
+      "column": 8,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_B_DOTS",
+        "orientation_deg": 90,
+        "symbol": "+",
+        "label": "Plus",
+        "braille": "⠬"
+      }
+    },
+    {
+      "row": 4,
+      "column": 10,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 180,
+        "symbol": "5",
+        "label": "Number 5",
+        "braille": "⠼⠑"
+      }
+    },
+    {
+      "row": 4,
+      "column": 12,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_B_DOTS",
+        "orientation_deg": 270,
+        "symbol": "=",
+        "label": "Equals",
+        "braille": "⠿"
+      }
+    },
+    {
+      "row": 4,
+      "column": 14,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 0,
+        "symbol": "1",
+        "label": "Number 1",
+        "braille": "⠼⠁"
+      }
+    },
+    {
+      "row": 4,
+      "column": 15,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 180,
+        "symbol": "5",
+        "label": "Number 5",
+        "braille": "⠼⠑"
+      }
+    },
+    {
+      "row": 6,
+      "column": 5,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 45,
+        "symbol": "2",
+        "label": "Number 2",
+        "braille": "⠼⠃"
+      }
+    },
+    {
+      "row": 6,
+      "column": 6,
+      "peg": {
+        "type": "ALGEBRAIC",
+        "end": "END_A_ALGEBRA",
+        "orientation_deg": 0,
+        "symbol": "x",
+        "label": "Variable x",
+        "braille": "⠭"
+      }
+    },
+    {
+      "row": 6,
+      "column": 12,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_B_DOTS",
+        "orientation_deg": 270,
+        "symbol": "=",
+        "label": "Equals",
+        "braille": "⠿"
+      }
+    },
+    {
+      "row": 6,
+      "column": 14,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 0,
+        "symbol": "1",
+        "label": "Number 1",
+        "braille": "⠼⠁"
+      }
+    },
+    {
+      "row": 6,
+      "column": 15,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_B_DOTS",
+        "orientation_deg": 45,
+        "symbol": "0",
+        "label": "Number 0",
+        "braille": "⠼⠚"
+      }
+    },
+    {
+      "row": 8,
+      "column": 6,
+      "peg": {
+        "type": "ALGEBRAIC",
+        "end": "END_A_ALGEBRA",
+        "orientation_deg": 0,
+        "symbol": "x",
+        "label": "Variable x",
+        "braille": "⠭"
+      }
+    },
+    {
+      "row": 8,
+      "column": 12,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_B_DOTS",
+        "orientation_deg": 270,
+        "symbol": "=",
+        "label": "Equals",
+        "braille": "⠿"
+      }
+    },
+    {
+      "row": 8,
+      "column": 15,
+      "peg": {
+        "type": "ARITHMETIC",
+        "end": "END_A_BAR",
+        "orientation_deg": 180,
+        "symbol": "5",
+        "label": "Number 5",
+        "braille": "⠼⠑"
+      }
+    }
+  ]
+}

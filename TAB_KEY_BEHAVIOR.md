@@ -26,11 +26,11 @@ does not invoke any Taylor Frame command.
 ## What receives focus
 
 When focus is on the `TaylorFrameWidget`, Tab leaves the grid and follows the
-normal Qt focus chain. The next focus target is the next focusable widget in
-the containing window, normally the scroll area's focus target/viewport or the
-next focusable window control according to Qt's focus-chain ordering. The
-source does not define a custom tab order (`setTabOrder` is not used), so the
-application does not guarantee a custom named destination for Tab.
+normal Qt focus chain. The next focus target is the next focusable widget in the
+containing window, normally the scroll area's focus target/viewport or the next
+focusable window control according to Qt's focus-chain ordering. The source does
+not define a custom tab order (`setTabOrder` is not used), so the application
+does not guarantee a custom named destination for Tab.
 
 When focus is in a dialog, Tab is handled by Qt within that dialog's normal
 focus chain. For example, `GoToDialog` and `NewFrameDialog` contain focusable

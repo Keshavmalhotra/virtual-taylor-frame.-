@@ -49,6 +49,7 @@ The **Virtual Taylor Frame** is designed to be operated entirely using the keybo
 * **F7 (or Ctrl + F5)**: Read current column vertically.
 * **F8**: Inspect 4-way adjacent neighboring sockets (North, South, East, West).
 * **F2 (or V)**: Cycle speech verbosity level (**Minimal** -> **Normal** -> **Detailed**).
+* **Ctrl + Alt + T**: Find the next number in the frame.
 
 ---
 

@@ -3,6 +3,7 @@ Main Window for the Virtual Taylor Frame desktop application.
 """
 from typing import Optional
 from pathlib import Path
+import sys
 
 from PySide6.QtWidgets import (
     QMainWindow,
@@ -13,7 +14,8 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QApplication,
 )
-from PySide6.QtCore import Qt, QSize, QSettings
+from PySide6.QtCore import Qt, QSize, QSettings, QUrl
+from PySide6.QtGui import QDesktopServices
 from PySide6.QtGui import QAction, QKeySequence, QIcon
 
 from virtual_taylor_frame.model.frame import TaylorFrame
@@ -183,6 +185,11 @@ class MainWindow(QMainWindow):
         self.act_goto.setShortcut(QKeySequence("Ctrl+G"))
         self.act_goto.triggered.connect(self._on_goto)
 
+        self.act_next_number = QAction("Find &Next Number", self)
+        self.act_next_number.setShortcut(QKeySequence("Ctrl+Alt+T"))
+        self.act_next_number.setStatusTip("Move to the next number in the frame")
+        self.act_next_number.triggered.connect(self._on_next_number)
+
         # Inspection Actions
         self.act_inspect_cell = QAction("Inspect &Current Socket", self)
         self.act_inspect_cell.setShortcut(QKeySequence("Space"))
@@ -277,6 +284,7 @@ class MainWindow(QMainWindow):
         # Navigate Menu
         menu_nav = mb.addMenu("&Navigate")
         menu_nav.addAction(self.act_goto)
+        menu_nav.addAction(self.act_next_number)
 
         # Inspect Menu
         menu_inspect = mb.addMenu("&Inspect")
@@ -539,6 +547,13 @@ class MainWindow(QMainWindow):
             r, c = dlg.get_coordinates()
             self.frame_widget._navigate_to(r, c, direction="Go To", is_jump=True)
 
+    def _on_next_number(self) -> None:
+        if self.model.next_number():
+            self.announcer.announce_math_destination(self.model, "number")
+        else:
+            self.announcer.output("No next number.")
+        self.frame_widget.update()
+
     def _on_view_summary_dialog(self) -> None:
         summary = self.model.summarize_frame()
         dlg = InspectDialog(summary, self)
@@ -569,6 +584,35 @@ class MainWindow(QMainWindow):
     def _on_help(self) -> None:
         dlg = HelpDialog(self)
         dlg.exec()
+
+    def offer_user_guide_on_first_launch(self) -> None:
+        """Offer the installed guide once, after the first application launch."""
+        if self.settings.value("user_guide_offer_shown", False, type=bool):
+            return
+
+        # Mark this before showing the modal prompt so declining, or an open
+        # failure, does not cause the prompt to recur on every launch.
+        self.settings.setValue("user_guide_offer_shown", True)
+        self.announcer.output("Would you like to read the User Guide? Choose Yes, open User Guide, or No, continue to the application.")
+        prompt = QMessageBox(self)
+        prompt.setWindowTitle("Read the User Guide?")
+        prompt.setText("Would you like to read the User Guide?")
+        yes_button = prompt.addButton("Yes, open User Guide", QMessageBox.ButtonRole.AcceptRole)
+        no_button = prompt.addButton("No, continue to the application", QMessageBox.ButtonRole.RejectRole)
+        prompt.setDefaultButton(yes_button)
+        prompt.exec()
+        answer = prompt.clickedButton()
+        if answer != yes_button:
+            self.announcer.output("Continuing to the application.")
+            return
+
+        guide_name = "USER_GUIDE.md"
+        base_dir = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parents[2]))
+        guide_path = base_dir / guide_name
+        if guide_path.exists() and QDesktopServices.openUrl(QUrl.fromLocalFile(str(guide_path))):
+            self.announcer.output("User Guide opened.")
+        else:
+            self.announcer.output("The User Guide could not be opened.")
 
     def _on_about(self) -> None:
         QMessageBox.about(

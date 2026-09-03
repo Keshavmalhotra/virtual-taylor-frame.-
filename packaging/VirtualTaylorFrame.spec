@@ -7,7 +7,7 @@ a = Analysis(
     ["..\\main.pyw"],
     pathex=["."],
     binaries=[],
-    datas=[],
+    datas=[("..\\USER_GUIDE.md", ".")],
     hiddenimports=hiddenimports,
     hookspath=[],
     hooksconfig={},

@@ -16,9 +16,9 @@ in the user profile rather than the installation directory, and `.tframe`
 files remain ordinary user-selected files.
 
 The packaged build preserves the existing AO3 integration, including speech
-and Braille output when a supported screen reader, AO3 driver, or Windows SAPI
-is installed and configured. These external accessibility services are not
-bundled into the application.
+when a supported screen reader, AO3 driver, or Windows SAPI is installed and
+configured. These external accessibility services are not bundled into the
+application.
 
 **Virtual Taylor Frame** is a Windows desktop application designed from the ground up for blind and visually impaired mathematics students. It provides a full digital emulation of a physical **Taylor Frame** (Taylor's Mathematical Frame), combining non-visual keyboard-first interaction, Accessible Output 3 (AO3) screen reader integration, a decoupled mathematical model, and high-contrast tactile rendering.
 
@@ -37,9 +37,8 @@ bundled into the application.
 2. **Keyboard-First Non-Visual Interaction**:
    - Every single operation is accessible via keyboard shortcuts without needing sight or mouse.
    - Dual-mode input: Type math characters directly (`0-9`, `+`, `-`, `*`, `/`, `=`, `x`, `y`, etc.) or manually rotate (`[` / `]`), flip (`F`), and toggle peg types (`T`).
-3. **Screen Reader & Braille Output (Accessible Output 3)**:
+3. **Screen Reader and Speech (Accessible Output 3)**:
    - Interfaces natively with **NVDA**, **JAWS**, and **Windows SAPI / Narrator**.
-   - Dual speech and Braille display output.
    - Intelligent multi-level verbosity (**Minimal**, **Normal**, **Detailed**) with on-the-fly toggling (`F2` / `V`).
 4. **Spatial Math & Frame Inspection**:
    - **Space**: Inspect current socket, peg type, tactile end, and orientation angle in degrees and compass bearings.
@@ -112,8 +111,8 @@ bundled into the application.
                              |
              +---------------+---------------+
              |               |               |
-           Speech         Braille       Screen Reader
-       (NVDA/JAWS/SAPI)   Display      (Accessible Name)
+           Speech                Screen Reader
+       (NVDA/JAWS/SAPI)          (Accessible Name)
 ```
 
 ---

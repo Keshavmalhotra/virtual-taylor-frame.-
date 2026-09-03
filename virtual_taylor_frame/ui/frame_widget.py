@@ -312,7 +312,7 @@ class TaylorFrameWidget(QWidget):
                     current = self._region_at(self.model.cursor_row, self.model.cursor_col)
                     self.announcer.announce_region(self.model, current) if current else self.announcer.output("Cursor is not in a named region.")
                 return
-            nav = {Qt.Key.Key_N:("number",True), Qt.Key.Key_P:("number",False),
+            nav = {Qt.Key.Key_T:("number",True), Qt.Key.Key_P:("number",False),
                    Qt.Key.Key_O:("operator",True), Qt.Key.Key_I:("operator",False),
                    Qt.Key.Key_E:("expression",True), Qt.Key.Key_W:("expression",False)}
             if key in nav:

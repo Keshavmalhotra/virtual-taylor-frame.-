@@ -9,7 +9,7 @@ This application is a digital, accessible version of the physical Taylor Frame
 visually impaired students, teachers, and mathematicians.
 
 Every feature of this application is fully accessible using only the keyboard,
-with real-time speech and Braille output via Accessible Output 3 (AO3) compatible
+with real-time speech output via Accessible Output 3 (AO3) compatible
 with NVDA, JAWS, and Windows Narrator / SAPI.
 
 ================================================================================

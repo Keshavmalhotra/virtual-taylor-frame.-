@@ -20,7 +20,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from PySide6.QtWidgets import QApplication
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 
 from virtual_taylor_frame.model.frame import TaylorFrame
 from virtual_taylor_frame.model.types import VerbosityLevel
@@ -86,6 +86,7 @@ def main():
     window.show()
     window.raise_()
     window.activateWindow()
+    QTimer.singleShot(0, window.offer_user_guide_on_first_launch)
 
     return app.exec()
 

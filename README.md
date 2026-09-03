@@ -1,5 +1,14 @@
 # Virtual Taylor Frame
 
+## Download for Windows
+
+Most users should download the latest `VirtualTaylorFrame-Setup.exe` from the
+[GitHub Releases page](https://github.com/Keshavmalhotra/virtual-taylor-frame.-/releases).
+The installer includes Python and all application dependencies. A
+`VirtualTaylorFrame-Portable.zip` is also available for users who prefer not
+to install the application. Cloning this source repository is intended for
+developers only.
+
 **Virtual Taylor Frame** is a Windows desktop application designed from the ground up for blind and visually impaired mathematics students. It provides a full digital emulation of a physical **Taylor Frame** (Taylor's Mathematical Frame), combining non-visual keyboard-first interaction, Accessible Output 3 (AO3) screen reader integration, a decoupled mathematical model, and high-contrast tactile rendering.
 
 ---

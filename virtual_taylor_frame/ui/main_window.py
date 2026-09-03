@@ -13,12 +13,14 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QApplication,
 )
-from PySide6.QtCore import Qt, QSize
+from PySide6.QtCore import Qt, QSize, QSettings
 from PySide6.QtGui import QAction, QKeySequence, QIcon
 
 from virtual_taylor_frame.model.frame import TaylorFrame
 from virtual_taylor_frame.commands.history import UndoRedoManager
-from virtual_taylor_frame.commands.block_commands import ClearAllCommand
+from virtual_taylor_frame.commands.block_commands import (
+    ClearAllCommand, ExtendFrameCommand, ShrinkFrameCommand,
+)
 from virtual_taylor_frame.accessibility.announcer import Announcer
 from virtual_taylor_frame.accessibility.audio_cues import AudioCues
 from virtual_taylor_frame.accessibility.ao3_engine import AO3Engine
@@ -54,6 +56,7 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(640, 480)
 
         self.current_filepath: Optional[str] = None
+        self.settings = QSettings("VirtualTaylorFrame", "VirtualTaylorFrame")
         self.model: TaylorFrame = frame if frame is not None else TaylorFrame(20, 30)
         self.history: UndoRedoManager = UndoRedoManager()
         self.audio_cues: AudioCues = audio_cues if audio_cues is not None else AudioCues()
@@ -156,6 +159,25 @@ class MainWindow(QMainWindow):
         self.act_clear_frame.setShortcut(QKeySequence("Ctrl+Shift+Delete"))
         self.act_clear_frame.triggered.connect(self._on_clear_frame)
 
+        self.act_extend_rows = QAction("Extend Frame by 5 &Rows", self)
+        self.act_extend_rows.setShortcut(QKeySequence("Ctrl+Alt+Down"))
+        self.act_extend_rows.triggered.connect(lambda: self._on_extend_frame(5, 0))
+        self.act_extend_cols = QAction("Extend Frame by 5 &Columns", self)
+        self.act_extend_cols.setShortcut(QKeySequence("Ctrl+Alt+Right"))
+        self.act_extend_cols.triggered.connect(lambda: self._on_extend_frame(0, 5))
+        self.act_extend_both = QAction("Extend Frame by 5 Rows and Columns", self)
+        self.act_extend_both.setShortcut(QKeySequence("Ctrl+Alt+End"))
+        self.act_extend_both.triggered.connect(lambda: self._on_extend_frame(5, 5))
+        self.act_shrink_rows = QAction("Shrink Frame by 5 &Rows", self)
+        self.act_shrink_rows.setShortcut(QKeySequence("Ctrl+Alt+Up"))
+        self.act_shrink_rows.triggered.connect(lambda: self._on_shrink_frame(5, 0))
+        self.act_shrink_cols = QAction("Shrink Frame by 5 &Columns", self)
+        self.act_shrink_cols.setShortcut(QKeySequence("Ctrl+Alt+Left"))
+        self.act_shrink_cols.triggered.connect(lambda: self._on_shrink_frame(0, 5))
+        self.act_shrink_both = QAction("Shrink Frame by 5 Rows and Columns", self)
+        self.act_shrink_both.setShortcut(QKeySequence("Ctrl+Alt+Home"))
+        self.act_shrink_both.triggered.connect(lambda: self._on_shrink_frame(5, 5))
+
         # Navigation Actions
         self.act_goto = QAction("&Go to Coordinate...", self)
         self.act_goto.setShortcut(QKeySequence("Ctrl+G"))
@@ -195,6 +217,22 @@ class MainWindow(QMainWindow):
         self.act_toggle_sound.setChecked(self.audio_cues.enabled)
         self.act_toggle_sound.triggered.connect(self._on_toggle_sound)
 
+        self.act_auto_advance = QAction("Auto-advance after input", self)
+        self.act_auto_advance.setCheckable(True)
+        self.act_auto_advance.setShortcut(QKeySequence("F3"))
+        enabled = self.settings.value("auto_advance_after_input", True, type=bool)
+        self.act_auto_advance.setChecked(enabled)
+        self.frame_widget.auto_advance = enabled
+        self.act_auto_advance.triggered.connect(self._on_toggle_auto_advance)
+
+        self.act_announce_regions = QAction("Announce named region when entering", self)
+        self.act_announce_regions.setCheckable(True)
+        self.act_announce_regions.setShortcut(QKeySequence("F4"))
+        announce_regions = self.settings.value("announce_named_region_on_entry", True, type=bool)
+        self.act_announce_regions.setChecked(announce_regions)
+        self.frame_widget.announce_named_regions = announce_regions
+        self.act_announce_regions.triggered.connect(self._on_toggle_announce_regions)
+
         # Help Actions
         self.act_help = QAction("&Keyboard Guide && Documentation", self)
         self.act_help.setShortcut(QKeySequence("F1"))
@@ -228,6 +266,13 @@ class MainWindow(QMainWindow):
         menu_edit.addAction(self.act_paste)
         menu_edit.addSeparator()
         menu_edit.addAction(self.act_clear_frame)
+        menu_edit.addSeparator()
+        menu_edit.addAction(self.act_extend_rows)
+        menu_edit.addAction(self.act_extend_cols)
+        menu_edit.addAction(self.act_extend_both)
+        menu_edit.addAction(self.act_shrink_rows)
+        menu_edit.addAction(self.act_shrink_cols)
+        menu_edit.addAction(self.act_shrink_both)
 
         # Navigate Menu
         menu_nav = mb.addMenu("&Navigate")
@@ -247,6 +292,8 @@ class MainWindow(QMainWindow):
         menu_a11y = mb.addMenu("&Accessibility")
         menu_a11y.addAction(self.act_cycle_verbosity)
         menu_a11y.addAction(self.act_toggle_sound)
+        menu_a11y.addAction(self.act_auto_advance)
+        menu_a11y.addAction(self.act_announce_regions)
         menu_a11y.addSeparator()
 
         # Theme Submenu
@@ -460,6 +507,26 @@ class MainWindow(QMainWindow):
             self.announcer.output(msg)
             self.frame_widget.update()
 
+    def _on_extend_frame(self, rows: int, cols: int) -> None:
+        cmd = ExtendFrameCommand(rows, cols)
+        success, message = self.history.execute_command(cmd, self.model, self.announcer.verbosity)
+        if success:
+            self.announcer.output(message)
+            self.frame_widget.updateGeometry()
+            self.frame_widget.update()
+
+    def _on_shrink_frame(self, rows: int, cols: int) -> None:
+        cmd = ShrinkFrameCommand(rows, cols)
+        success, message = self.history.execute_command(cmd, self.model, self.announcer.verbosity)
+        if success:
+            self.announcer.output(message)
+            self.frame_widget.updateGeometry()
+            self.frame_widget.update()
+        else:
+            self.announcer.output(
+                "Cannot shrink frame: the area being removed contains objects, or the frame is already at minimum size."
+            )
+
     def _on_goto(self) -> None:
         dlg = GoToDialog(
             self.model.cursor_row,
@@ -485,6 +552,19 @@ class MainWindow(QMainWindow):
         self.audio_cues.enabled = checked
         status = "enabled" if checked else "disabled"
         self.announcer.output(f"Audio cues {status}.")
+
+    def _on_toggle_auto_advance(self, checked: bool) -> None:
+        self.frame_widget.auto_advance = checked
+        self.settings.setValue("auto_advance_after_input", checked)
+        self.announcer.output("Auto-advance enabled." if checked else "Auto-advance disabled.")
+
+    def _on_toggle_announce_regions(self, checked: bool) -> None:
+        self.frame_widget.announce_named_regions = checked
+        self.settings.setValue("announce_named_region_on_entry", checked)
+        self.announcer.output(
+            "Announce named region when entering enabled."
+            if checked else "Announce named region when entering disabled."
+        )
 
     def _on_help(self) -> None:
         dlg = HelpDialog(self)

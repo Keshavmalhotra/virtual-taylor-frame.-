@@ -191,6 +191,21 @@ class TestTaylorFrameModel:
         assert "East: Plus" in desc
         assert "West: empty" in desc
 
+    def test_extend_preserves_existing_content_and_coordinates(self):
+        frame = TaylorFrame(rows=3, cols=4)
+        peg = TaylorPeg.from_symbol("+")
+        frame.place_peg(1, 2, peg)
+        frame.set_cursor(1, 2)
+
+        frame.extend(rows=2, cols=3)
+
+        assert (frame.rows, frame.cols) == (5, 7)
+        assert frame.get_cell(1, 2).peg is peg
+        assert (frame.get_cell(1, 2).row, frame.get_cell(1, 2).col) == (1, 2)
+        assert (frame.cursor_row, frame.cursor_col) == (1, 2)
+        assert frame.count_occupied() == 1
+        assert not frame.get_cell(4, 6).is_occupied
+
     def test_clear_row_and_clear_all(self):
         frame = TaylorFrame(rows=10, cols=10)
         frame.place_peg(2, 0, TaylorPeg.from_symbol("1"))

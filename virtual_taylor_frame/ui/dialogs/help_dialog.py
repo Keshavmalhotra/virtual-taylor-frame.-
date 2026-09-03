@@ -53,6 +53,9 @@ The **Virtual Taylor Frame** is designed to be operated entirely using the keybo
 ---
 
 ## 4. Editing & Block Selection
+* **Ctrl + Alt + Down**: Extend frame by 5 rows.
+* **Ctrl + Alt + Right**: Extend frame by 5 columns.
+* **Ctrl + Alt + End**: Extend frame by 5 rows and 5 columns.
 * **Ctrl + Z**: Undo last operation.
 * **Ctrl + Y (or Ctrl + Shift + Z)**: Redo last undone operation.
 * **Shift + Arrow Keys**: Expand rectangular selection block.

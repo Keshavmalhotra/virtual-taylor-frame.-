@@ -51,11 +51,13 @@ class Announcer:
         display_col: int,
         cell: Cell,
         is_jump: bool = False,
+        entered_region: Optional[str] = None,
     ) -> None:
         """
         Announce cursor movement across the frame.
         """
-        prefix = f"Jump {direction}. " if is_jump else f"{direction}. " if direction else ""
+        region_prefix = f"{entered_region} region. " if entered_region else ""
+        prefix = region_prefix + (f"Jump {direction}. " if is_jump else f"{direction}. " if direction else "")
         content = cell.describe(self.verbosity, include_coords=False)
 
         if self.verbosity == VerbosityLevel.MINIMAL:
@@ -95,8 +97,36 @@ class Announcer:
         """
         Announce comprehensive frame construction overview (F5).
         """
-        summary = frame.summarize_frame()
+        if frame.regions:
+            parts = []
+            for region in frame.regions:
+                lines = []
+                for row in range(region.start_row, region.end_row + 1):
+                    for seg in frame.describe_row(row).split("; "):
+                        if seg and row >= region.start_row: lines.append(seg)
+                parts.append(f"{region.name} region. " + (" ".join(lines) if lines else "Empty."))
+            summary = " ".join(parts)
+        else:
+            summary = frame.summarize_frame()
         self.output(summary, interrupt=True)
+
+    def announce_math_destination(self, frame: TaylorFrame, kind: str) -> None:
+        cell = frame.get_current_cell()
+        if kind == "number":
+            end = cell.display_col
+            while end < frame.cols and frame.get_cell(cell.row, end).is_occupied and frame.get_cell(cell.row, end).peg.symbol.isdigit(): end += 1
+            span = f"columns {cell.display_col} to {end - 1}" if end > cell.display_col + 1 else f"column {cell.display_col}"
+            self.output(f"Number {''.join(frame.get_cell(cell.row,c).peg.symbol for c in range(cell.col,end))}, row {cell.display_row}, {span}.")
+        elif kind == "operator": self.output(f"{cell.peg.label}, row {cell.display_row}, column {cell.display_col}.")
+        else: self.output(f"Expression, row {cell.display_row}, column {cell.display_col}.")
+
+    def announce_region(self, frame: TaylorFrame, region) -> None:
+        text = []
+        for row in range(region.start_row, region.end_row + 1):
+            for seg in frame.describe_row(row).split("; "):
+                if seg: text.append(seg)
+        coords = f"Rows {region.start_row + 1}-{region.end_row + 1}, columns {region.start_col + 1}-{region.end_col + 1}."
+        self.output(f"{region.name} region. {coords} " + (" ".join(text) if text else "Empty."), interrupt=True)
 
     def announce_neighbors(self, row: int, col: int, frame: TaylorFrame) -> None:
         """

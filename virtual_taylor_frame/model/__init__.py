@@ -15,6 +15,7 @@ from virtual_taylor_frame.model.cell import Cell
 from virtual_taylor_frame.model.selection import SelectionRange, ClipboardBlock
 from virtual_taylor_frame.model.expression import ExpressionAnalyzer, RowExpressionSegment
 from virtual_taylor_frame.model.frame import TaylorFrame
+from virtual_taylor_frame.model.region import NamedRegion
 
 __all__ = [
     "PegOrientation",
@@ -31,4 +32,5 @@ __all__ = [
     "ExpressionAnalyzer",
     "RowExpressionSegment",
     "TaylorFrame",
+    "NamedRegion",
 ]

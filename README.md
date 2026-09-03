@@ -26,7 +26,9 @@
    - **F5**: Full construction summary of all rows and expressions.
    - **F6** (or `Shift+F5`): Read horizontal continuous row expressions.
    - **F7** (or `Ctrl+F5`): Read vertical columns (for column arithmetic / alignment).
+   - **F4**: Toggle announcing a named region once when arrow navigation enters it (saved between sessions).
    - **F8**: Inspect 4-way adjacent neighbor sockets (North, South, East, West).
+   - Overlapping named regions use the first region in creation/file order for entry announcements.
 5. **Persistence & Formats**:
    - Native `.tframe` format preserving pure mathematical state, coordinates, orientations, and metadata.
    - Plain text export (`.txt`) with ASCII visual layout and object inventory.

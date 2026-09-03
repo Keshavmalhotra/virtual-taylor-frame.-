@@ -3,7 +3,7 @@ Interactive Taylor Frame visual QWidget with full keyboard accessibility,
 vector rendering, selection handling, and event integration.
 """
 from typing import Optional, Dict, Any, Tuple
-from PySide6.QtWidgets import QWidget, QSizePolicy
+from PySide6.QtWidgets import QWidget, QSizePolicy, QInputDialog
 from PySide6.QtCore import Qt, QRectF, QPointF, QSize, Signal
 from PySide6.QtGui import (
     QPainter,
@@ -39,6 +39,7 @@ from virtual_taylor_frame.commands.block_commands import (
     ClearRowCommand,
     ClearRegionCommand,
     PasteBlockCommand,
+    MoveSelectionCommand,
 )
 from virtual_taylor_frame.accessibility.announcer import Announcer
 from virtual_taylor_frame.accessibility.audio_cues import AudioCues
@@ -63,6 +64,10 @@ class TaylorFrameWidget(QWidget):
         parent=None,
     ):
         super().__init__(parent)
+        self.auto_advance = True
+        # When regions overlap, the first region in model.regions wins.  This
+        # is deterministic and preserves the order in which regions are loaded/created.
+        self.announce_named_regions = True
         self.model: TaylorFrame = model
         self.history: UndoRedoManager = history
         self.announcer: Announcer = announcer
@@ -238,6 +243,15 @@ class TaylorFrameWidget(QWidget):
 
     # --- Keyboard Navigation & Editing ---
 
+    def _region_at(self, row: int, col: int):
+        """Return the first named region containing a logical cell."""
+        return next(
+            (region for region in self.model.regions
+             if region.start_row <= row <= region.end_row
+             and region.start_col <= col <= region.end_col),
+            None,
+        )
+
     def _navigate_to(
         self,
         r: int,
@@ -249,24 +263,67 @@ class TaylorFrameWidget(QWidget):
         moved = self.model.set_cursor(r, c)
         if moved or direction == "Click":
             cell = self.model.get_current_cell()
+            old_region = self._region_at(old_r, old_c)
+            new_region = self._region_at(cell.row, cell.col)
+            entered_region = None
+            if (moved and self.announce_named_regions and new_region is not None
+                    and (old_region is None or old_region is not new_region)):
+                entered_region = new_region.name
             self.announcer.announce_navigation(
                 direction=direction,
                 display_row=cell.display_row,
                 display_col=cell.display_col,
                 cell=cell,
                 is_jump=is_jump,
+                entered_region=entered_region,
             )
             self.cursor_changed.emit(cell.display_row, cell.display_col)
             self.update()
         else:
             self.audio_cues.play_boundary()
-            self.announcer.announce_boundary(f"Edge ({direction})")
+            boundary = f"Edge ({direction})" if direction else "Edge"
+            self.announcer.announce_boundary(boundary)
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
         key = event.key()
         modifiers = event.modifiers()
         has_ctrl = bool(modifiers & Qt.KeyboardModifier.ControlModifier)
         has_shift = bool(modifiers & Qt.KeyboardModifier.ShiftModifier)
+
+        # Meaningful mathematical navigation (Ctrl+Alt, leaving existing keys intact).
+        if has_ctrl and bool(modifiers & Qt.KeyboardModifier.AltModifier):
+            if key == Qt.Key.Key_R and self.model.selection:
+                name, ok = QInputDialog.getText(self, "Create Named Region", "Region name:")
+                if ok and name.strip():
+                    s = self.model.selection
+                    try:
+                        region = self.model.create_region(name.strip(), s.start_row, s.start_col, s.end_row, s.end_col)
+                        self.announcer.announce_region(self.model, region)
+                    except ValueError as exc: self.announcer.output(str(exc))
+                return
+            if key in (Qt.Key.Key_G, Qt.Key.Key_M):
+                if key == Qt.Key.Key_G:
+                    moved = self.model.jump_region(not has_shift)
+                    if moved:
+                        region = self._region_at(self.model.cursor_row, self.model.cursor_col)
+                        self.announcer.announce_region(self.model, region)
+                    else: self.announcer.output("No named regions.")
+                else:
+                    current = self._region_at(self.model.cursor_row, self.model.cursor_col)
+                    self.announcer.announce_region(self.model, current) if current else self.announcer.output("Cursor is not in a named region.")
+                return
+            nav = {Qt.Key.Key_N:("number",True), Qt.Key.Key_P:("number",False),
+                   Qt.Key.Key_O:("operator",True), Qt.Key.Key_I:("operator",False),
+                   Qt.Key.Key_E:("expression",True), Qt.Key.Key_W:("expression",False)}
+            if key in nav:
+                kind, forward = nav[key]
+                if self.model.jump_math_object(kind, forward): self.announcer.announce_math_destination(self.model, kind)
+                else: self.announcer.output(f"No {'next' if forward else 'previous'} {kind}.")
+                self.update(); return
+            if key in (Qt.Key.Key_H, Qt.Key.Key_J):
+                if self.model.expression_boundary(key == Qt.Key.Key_H): self.announcer.announce_math_destination(self.model, "expression")
+                else: self.announcer.output("No current expression.")
+                self.update(); return
 
         # 1. Navigation with Arrow Keys
         if key in (Qt.Key.Key_Up, Qt.Key.Key_Down, Qt.Key.Key_Left, Qt.Key.Key_Right):
@@ -280,6 +337,18 @@ class TaylorFrameWidget(QWidget):
             elif key == Qt.Key.Key_Right:
                 dc, dir_name = 1, "Right"
 
+            # With a selection, arrows manipulate the mathematical structure.
+            # Unmodified arrows retain their original cursor-navigation behavior
+            # when no selection is active.
+            if self.model.selection and not has_shift and not has_ctrl:
+                cmd = MoveSelectionCommand(self.model.selection, dr, dc)
+                success, msg = self.history.execute_command(
+                    cmd, self.model, self.announcer.verbosity
+                )
+                self.announcer.output(msg)
+                self.update()
+                return
+
             if has_shift:
                 # Expand selection
                 if not self.model.selection:
@@ -289,7 +358,7 @@ class TaylorFrameWidget(QWidget):
                 ar, ac = self._selection_anchor or (self.model.cursor_row, self.model.cursor_col)
                 sel = SelectionRange(ar, ac, target_r, target_c)
                 self.model.set_selection(sel)
-                self._navigate_to(target_r, target_c, direction=dir_name)
+                self._navigate_to(target_r, target_c)
                 self.announcer.announce_selection(sel)
                 return
 
@@ -318,7 +387,6 @@ class TaylorFrameWidget(QWidget):
             self._navigate_to(
                 self.model.cursor_row + dr,
                 self.model.cursor_col + dc,
-                direction=dir_name,
             )
             return
 
@@ -483,7 +551,7 @@ class TaylorFrameWidget(QWidget):
                 self.audio_cues.play_place()
                 self.announcer.output(msg)
                 # Auto-advance cursor right if not at right edge
-                if self.model.cursor_col < self.model.cols - 1:
+                if self.auto_advance and self.model.cursor_col < self.model.cols - 1:
                     self.model.move_cursor(0, 1)
                     self.cursor_changed.emit(self.model.display_cursor_row, self.model.display_cursor_col)
                 self.update()

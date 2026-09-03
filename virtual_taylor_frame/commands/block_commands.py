@@ -10,6 +10,57 @@ from virtual_taylor_frame.model.selection import SelectionRange, ClipboardBlock
 from virtual_taylor_frame.model.types import VerbosityLevel
 
 
+class ExtendFrameCommand(Command):
+    """Extend the frame with empty rows and/or columns."""
+
+    def __init__(self, rows: int = 0, cols: int = 0):
+        self.add_rows, self.add_cols = rows, cols
+        self.old_rows = self.old_cols = 0
+
+    @property
+    def name(self) -> str:
+        return "Extend Frame"
+
+    def execute(self, frame: TaylorFrame) -> bool:
+        self.old_rows, self.old_cols = frame.rows, frame.cols
+        frame.extend(self.add_rows, self.add_cols)
+        return True
+
+    def undo(self, frame: TaylorFrame) -> bool:
+        frame.shrink_to(self.old_rows, self.old_cols)
+        return True
+
+    def get_announcement(self, frame: TaylorFrame, verbosity: VerbosityLevel) -> str:
+        return f"Frame extended. {frame.rows} rows, {frame.cols} columns."
+
+
+class ShrinkFrameCommand(Command):
+    """Remove empty rows and/or columns from the bottom/right of the frame."""
+
+    def __init__(self, rows: int = 0, cols: int = 0):
+        self.remove_rows, self.remove_cols = rows, cols
+        self.old_rows = self.old_cols = 0
+
+    @property
+    def name(self) -> str:
+        return "Shrink Frame"
+
+    def execute(self, frame: TaylorFrame) -> bool:
+        self.old_rows, self.old_cols = frame.rows, frame.cols
+        try:
+            frame.shrink_to(frame.rows - self.remove_rows, frame.cols - self.remove_cols)
+        except ValueError:
+            return False
+        return True
+
+    def undo(self, frame: TaylorFrame) -> bool:
+        frame.extend(self.old_rows - frame.rows, self.old_cols - frame.cols)
+        return True
+
+    def get_announcement(self, frame: TaylorFrame, verbosity: VerbosityLevel) -> str:
+        return f"Frame shrunk. {frame.rows} rows, {frame.cols} columns."
+
+
 class ClearRowCommand(Command):
     """Clears all pegs in a specific row."""
 
@@ -144,3 +195,55 @@ class PasteBlockCommand(Command):
             f"Pasted {count} object{'s' if count > 1 else ''} starting at "
             f"Row {self.target_row + 1}, Column {self.target_col + 1}."
         )
+
+
+class MoveSelectionCommand(Command):
+    """Move every occupied cell in a selection by one grid step."""
+
+    def __init__(self, selection: SelectionRange, delta_row: int, delta_col: int):
+        if abs(delta_row) + abs(delta_col) != 1:
+            raise ValueError("Selection moves must be one cell in one direction")
+        self.selection = selection
+        self.delta_row, self.delta_col = delta_row, delta_col
+        self.items: List[Tuple[int, int, TaylorPeg]] = []
+
+    @property
+    def name(self) -> str:
+        return "Move selection"
+
+    def execute(self, frame: TaylorFrame) -> bool:
+        self.items = [(r, c, frame.get_cell(r, c).peg)
+                      for r in range(self.selection.min_row, self.selection.max_row + 1)
+                      for c in range(self.selection.min_col, self.selection.max_col + 1)
+                      if frame.get_cell(r, c).is_occupied]
+        if not self.items:
+            return False
+        destinations = {(r + self.delta_row, c + self.delta_col) for r, c, _ in self.items}
+        if any(not frame.is_valid_coord(r, c) for r, c in destinations):
+            return False
+        sources = {(r, c) for r, c, _ in self.items}
+        if any(frame.get_cell(r, c).is_occupied and (r, c) not in sources for r, c in destinations):
+            return False
+        for r, c, _ in self.items:
+            frame.remove_peg(r, c)
+        for r, c, peg in self.items:
+            frame.place_peg(r + self.delta_row, c + self.delta_col, peg)
+        frame.set_selection(SelectionRange(self.selection.start_row + self.delta_row,
+                                            self.selection.start_col + self.delta_col,
+                                            self.selection.end_row + self.delta_row,
+                                            self.selection.end_col + self.delta_col))
+        frame.set_cursor(self.selection.start_row + self.delta_row, self.selection.start_col + self.delta_col)
+        return True
+
+    def undo(self, frame: TaylorFrame) -> bool:
+        for r, c, _ in self.items:
+            frame.remove_peg(r + self.delta_row, c + self.delta_col)
+        for r, c, peg in self.items:
+            frame.place_peg(r, c, peg)
+        frame.set_selection(self.selection)
+        frame.set_cursor(self.selection.start_row, self.selection.start_col)
+        return True
+
+    def get_announcement(self, frame: TaylorFrame, verbosity: VerbosityLevel) -> str:
+        direction = {(-1, 0): "up", (1, 0): "down", (0, -1): "left", (0, 1): "right"}[(self.delta_row, self.delta_col)]
+        return f"Moved selection {direction}."

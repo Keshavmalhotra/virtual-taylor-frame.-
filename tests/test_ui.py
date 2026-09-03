@@ -55,13 +55,13 @@ class TestTaylorFrameWidgetKeyboard:
         ev_down = QKeyEvent(QKeyEvent.Type.KeyPress, Qt.Key.Key_Down, Qt.KeyboardModifier.NoModifier)
         widget.keyPressEvent(ev_down)
         assert (frame.cursor_row, frame.cursor_col) == (1, 0)
-        assert "Down." in engine.last_spoken
+        assert engine.last_spoken == "Row 2, column 1. Empty."
 
         # Press Right arrow
         ev_right = QKeyEvent(QKeyEvent.Type.KeyPress, Qt.Key.Key_Right, Qt.KeyboardModifier.NoModifier)
         widget.keyPressEvent(ev_right)
         assert (frame.cursor_row, frame.cursor_col) == (1, 1)
-        assert "Right." in engine.last_spoken
+        assert engine.last_spoken == "Row 2, column 2. Empty."
 
         # Press Up arrow
         ev_up = QKeyEvent(QKeyEvent.Type.KeyPress, Qt.Key.Key_Up, Qt.KeyboardModifier.NoModifier)

@@ -55,7 +55,7 @@ def main():
         app = QApplication(sys.argv)
     app.setApplicationName("Virtual Taylor Frame")
     app.setOrganizationName("AccessibleMath")
-    app.setApplicationVersion("1.0.0")
+    app.setApplicationVersion("0.1.0")
 
     # Initialize accessibility components
     ao_engine = AO3Engine()

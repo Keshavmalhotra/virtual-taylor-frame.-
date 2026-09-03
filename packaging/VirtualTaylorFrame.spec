@@ -4,7 +4,7 @@ from PyInstaller.utils.hooks import collect_submodules
 hiddenimports = collect_submodules("accessible_output2")
 
 a = Analysis(
-    ["main.pyw"],
+    ["..\\main.pyw"],
     pathex=["."],
     binaries=[],
     datas=[],
@@ -19,8 +19,7 @@ pyz = PYZ(a.pure)
 exe = EXE(
     pyz,
     a.scripts,
-    a.binaries,
-    a.datas,
+    [],
     [],
     name="VirtualTaylorFrame",
     debug=False,
@@ -28,4 +27,13 @@ exe = EXE(
     strip=False,
     upx=True,
     console=False,
+    exclude_binaries=True,
+)
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.datas,
+    strip=False,
+    upx=True,
+    name="VirtualTaylorFrame",
 )

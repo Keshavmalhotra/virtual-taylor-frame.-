@@ -19,6 +19,7 @@ htmlcov/
 .venv
 env/
 venv/
+.build-venv/
 
 # Editors & IDEs
 .idea/

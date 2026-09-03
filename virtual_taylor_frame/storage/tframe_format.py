@@ -12,7 +12,7 @@ from virtual_taylor_frame.model.frame import TaylorFrame
 FORMAT_NAME = "TaylorFrame"
 CURRENT_FORMAT_VERSION = "1.0.0"
 APP_NAME = "Virtual Taylor Frame"
-APP_VERSION = "1.0.0"
+APP_VERSION = "0.1.0"
 
 
 class TFrameError(Exception):

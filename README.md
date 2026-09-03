@@ -9,6 +9,17 @@ The installer includes Python and all application dependencies. A
 to install the application. Cloning this source repository is intended for
 developers only.
 
+The installer creates a Start Menu shortcut, offers an optional Desktop
+shortcut, and includes an uninstaller. The portable ZIP can be extracted to
+any user-writable folder and run without installation. Qt stores preferences
+in the user profile rather than the installation directory, and `.tframe`
+files remain ordinary user-selected files.
+
+The packaged build preserves the existing AO3 integration, including speech
+and Braille output when a supported screen reader, AO3 driver, or Windows SAPI
+is installed and configured. These external accessibility services are not
+bundled into the application.
+
 **Virtual Taylor Frame** is a Windows desktop application designed from the ground up for blind and visually impaired mathematics students. It provides a full digital emulation of a physical **Taylor Frame** (Taylor's Mathematical Frame), combining non-visual keyboard-first interaction, Accessible Output 3 (AO3) screen reader integration, a decoupled mathematical model, and high-contrast tactile rendering.
 
 ---
